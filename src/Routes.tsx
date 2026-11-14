@@ -43,6 +43,7 @@ import ManagerLoginPage from './pages/managers/ManagerLoginPage';
 import ManagerDashboardPage from './pages/managers/ManagerDashboardPage';
 import TenantNewPage from './pages/managers/TenantNewPage';
 import TenantDetailPage from './pages/managers/TenantDetailPage';
+import TenantEditPage from './pages/managers/TenantEditPage';
 
 import AdminCategoryArticlesPage from './pages/admins/category/Articles'
 
@@ -105,6 +106,7 @@ function AppRoutes() {
         <Route path="/manager/login" element={<ManagerLoginPage />} />
         <Route path="/manager/dashboard" element={<ManagerDashboardPage />} />
         <Route path="/manager/tenants/new" element={<TenantNewPage />} />
+        <Route path="/manager/tenants/:id/edit" element={<TenantEditPage />} />
         <Route path="/manager/tenants/:id" element={<TenantDetailPage />} />
 
         {/* 404ページ */}
