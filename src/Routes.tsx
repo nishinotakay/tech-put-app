@@ -16,6 +16,7 @@ import ArticleShowPage from './pages/users/article/Show';
 // 管理者用ページ
 import AdminLoginPage from './pages/admins/AdminLoginPage';
 import AdminCourseIndexPage from './pages/admins/course/Index';
+import AdminCategoryIndexPage from './pages/admins/category/Index';
 import AdminSignUpPage from './pages/admins/SignUpPage';
 import AdminMessagePage from './pages/admins/MessagePage';
 import AdminPassreset from './pages/admins/Passreset';
@@ -42,6 +43,8 @@ import ManagerLoginPage from './pages/managers/ManagerLoginPage';
 import ManagerDashboardPage from './pages/managers/ManagerDashboardPage';
 import TenantNewPage from './pages/managers/TenantNewPage';
 import TenantDetailPage from './pages/managers/TenantDetailPage';
+
+import AdminCategoryArticlesPage from './pages/admins/category/Articles'
 
 // アプリのルーティングを管理するコンポーネント。全ページのURL設定をここで一元管理する。
 function AppRoutes() {
@@ -72,6 +75,7 @@ function AppRoutes() {
         <Route path="/admin/reset" element={<AdminPassreset />} />
         <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
         <Route path="/admin/courses" element={<AdminCourseIndexPage />} />
+        <Route path="/admin/courses/:courseId/categories" element={<AdminCategoryIndexPage />} />
         <Route path="/admin/articles" element={<AdminArticleIndexPage />} />
         <Route path="/admin/articles/new" element={<AdminArticleNewPage />} />
         <Route path="/admin/articles/:id/edit" element={<AdminArticleEditPage />} />
@@ -91,6 +95,11 @@ function AppRoutes() {
         <Route path="/admin/:id" element={<AdminDetail />} />
 
         <Route path="/adminpage" element={<AdminPage />} />
+
+        <Route
+          path="/admin/courses/:courseId/categories/:categoryId/articles"
+          element={<AdminCategoryArticlesPage />}
+        />
 
         {/* マネージャー用ルート */}
         <Route path="/manager/login" element={<ManagerLoginPage />} />
