@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import AdminLayout from '../../../components/admin/AdminLayout'
 import { adminLogout, getCurrentAdmin, type Admin } from '../../../lib/adminApi'
@@ -7,6 +7,8 @@ import '../../../styles/pages/categoryArticles.css'
 import {
   getCategoryArticles,
   type CategoryArticle,
+  newCategoryArticles,
+  deleteCategoryArticles,
 } from '../../../lib/categoryApi'
 
 export default function AdminCategoryArticlesPage() {
@@ -104,6 +106,74 @@ export default function AdminCategoryArticlesPage() {
     navigate('/admin/login', { replace: true })
   }
 
+  const [adding, setAdding] = useState(false)
+  const [addError, setAddError] = useState('')
+  const deleteInProgress = useRef(false)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [deleteError, setDeleteError] = useState('')
+
+  async function handleUnlinkArticle(articleId: string) {
+    if (!categoryId || deleteInProgress.current || adding) return
+  
+    const article = linkedArticles.find(item => item.id === articleId)
+    if (!article) return
+  
+    if (!window.confirm(`「${article.title}」の紐付けを解除しますか？`)) return
+  
+    deleteInProgress.current = true
+    setDeletingId(articleId)
+    setDeleteError('')
+  
+    try {
+      await deleteCategoryArticles(categoryId, articleId)
+  
+      // 解除成功後、右の一覧から取り除く
+      setLinkedArticles(previous =>
+        previous.filter(item => item.id !== articleId)
+      )
+  
+      // 左の「追加できる記事」へ戻す
+      setAvailableArticles(previous =>
+        [...previous, article].sort(
+          (a, b) => Number(a.id) - Number(b.id)
+        )
+      )
+    } catch {
+      setDeleteError('記事の紐付け解除に失敗しました。')
+    } finally {
+      deleteInProgress.current = false
+      setDeletingId(null)
+    }
+  }
+
+  async function handleAddArticles() {
+    // カテゴリー未指定・未選択・処理中なら実行しない
+    if (
+      !categoryId ||
+      selectedIds.length === 0 ||
+      adding ||
+      deleteInProgress.current
+    ) return
+  
+    setAdding(true)
+    setAddError('')
+  
+    try {
+      const data = await newCategoryArticles(categoryId, selectedIds)
+  
+      // バックから返された追加後の一覧に更新する
+      setLinkedArticles(data.linkedArticles)
+      setAvailableArticles(data.availableArticles)
+  
+      // チェックの選択状態を解除する
+      setSelectedIds([])
+    } catch {
+      setAddError('記事の紐付けに失敗しました。')
+    } finally {
+      setAdding(false)
+    }
+  }
+
   function renderArticleTable(linked: boolean) {
     const articles = linked ? linkedArticles : availableArticles
     const search = linked ? linkedSearch : availableSearch
@@ -124,6 +194,11 @@ export default function AdminCategoryArticlesPage() {
     return (
       <section className="category-articles__column" aria-labelledby={`${prefix}-heading`}>
         <h2 id={`${prefix}-heading`}>{linked ? '紐付け済みの記事' : '追加できる記事'}（{articles.length}件）</h2>
+        {linked && deleteError && (
+          <p className="text-danger" role="alert">
+            {deleteError}
+          </p>
+        )}
         <label className="form-label" htmlFor={`${prefix}-search`}>タイトル・作成者で検索</label>
         <input id={`${prefix}-search`} className="form-control mb-3" placeholder="記事を検索" value={search} onChange={event => setSearch(event.target.value)} />
         <label className="form-label" htmlFor={`${prefix}-author`}>作成者で絞り込み</label>
@@ -149,7 +224,14 @@ export default function AdminCategoryArticlesPage() {
               {filtered.map(article => (
                 <tr key={article.id}>
                   <td>{linked ? (
-                    <button type="button" className="btn btn-outline-danger btn-sm" disabled>解除</button>
+                    <button
+                      type="button"
+                      className="btn btn-outline-danger btn-sm"
+                      onClick={() => handleUnlinkArticle(article.id)}
+                      disabled={deletingId !== null || adding}
+                    >
+                      {deletingId === article.id ? '解除中…' : '解除'}
+                    </button>
                   ) : (
                     <input type="checkbox" className="form-check-input" aria-label={`${article.title}を選択`} checked={selectedIds.includes(article.id)} onChange={event => {
                       const checked = event.target.checked
@@ -176,9 +258,20 @@ export default function AdminCategoryArticlesPage() {
         {!linked && (
           <div className="category-articles__selection-actions">
             <span className="text-muted" role="status">選択中：{selectedIds.length}件</span>
-            <button type="button" className="btn btn-primary" disabled>
-              選択した記事を追加 <span aria-hidden="true">→</span>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleAddArticles}
+              disabled={adding || deletingId !== null || selectedIds.length === 0}
+            >
+              {adding ? '追加中…' : '選択した記事を追加 →'}
             </button>
+
+            {addError && (
+              <p className="text-danger mt-2" role="alert">
+                {addError}
+              </p>
+            )}
           </div>
         )}
       </section>

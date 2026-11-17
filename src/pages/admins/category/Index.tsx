@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import AdminLayout from '../../../components/admin/AdminLayout'
 import CategoryList from '../../../components/admin/CategoryList'
-import Modal from '../../../components/admin/Modal'
+import Modal from '../../../components/shared/Modal'
 import {
   adminLogout,
   getCurrentAdmin,

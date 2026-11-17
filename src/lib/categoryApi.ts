@@ -55,6 +55,7 @@ export type CategoryArticle = {
   title: string
   author: string
   content: string
+  tenant_id: number
 }
 
 export type CategoryArticleResponse = {
@@ -78,4 +79,22 @@ export async function getCategoryArticles (
     `/admin/courses/${courseId}/categories/${categoryId}/articles`
   )
   return response.data
+}
+
+export async function newCategoryArticles (
+  categoryId: string,
+  articleIds: string[]
+): Promise<CategoryArticleResponse> {
+  const response = await api.post<CategoryArticleResponse>(
+    `/admin/categories/${categoryId}/articles`,
+    {articleIds: articleIds}
+  )
+  return response.data
+}
+
+export const deleteCategoryArticles = async (
+  categoryId: string,
+  id: string
+): Promise<void> => {
+  await api.delete(`/admin/categories/${categoryId}/articles/${id}`)
 }

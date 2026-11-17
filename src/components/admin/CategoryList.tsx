@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import Modal from './Modal'
+import Modal from '../shared/Modal'
 import { useParams } from 'react-router-dom'
 import { getApiErrorMessage } from '../../lib/api'
 import { updateCategory, deleteCategory, type Category } from '../../lib/categoryApi'
