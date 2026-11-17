@@ -1,0 +1,17 @@
+/* 受講生ページ・フォロー一覧・プロフィール一覧の幅をそろえる */
+.follow-page {
+  max-width: 720px;
+}
+
+/* 長い名前は名前側で折り返し、右のボタンを押し出さない */
+.follow-user-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* タブの下に一覧をつなげるため、一覧の上の角と線を消す */
+.follow-list > .list-group-item:first-child {
+  border-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
