@@ -18,7 +18,7 @@ export default function HeaderItem({ admin, dropdownOpen, setDropdownOpen, onLog
 
   return (
     <div
-      className="d-flex justify-content-between align-items-center px-4"
+      className="d-flex justify-content-between align-items-center gap-2 px-3 px-md-4"
       style={{
         backgroundColor: "#ffffff",
         borderBottom: "1px solid #dee2e6",
@@ -26,10 +26,10 @@ export default function HeaderItem({ admin, dropdownOpen, setDropdownOpen, onLog
       }}
     >
       {/* 左側：ハンバーガー＋タイトル＋アクション */}
-      <div className="d-flex align-items-center gap-3">
+      <div className="d-flex align-items-center gap-3 admin-header__start">
         <button
           type="button"
-          className="hamburger-btn me-3"
+          className="hamburger-btn me-md-3 flex-shrink-0"
           onClick={onToggleSidebar}
           aria-label="サイドバーを開閉"
         >
@@ -41,16 +41,16 @@ export default function HeaderItem({ admin, dropdownOpen, setDropdownOpen, onLog
           </svg>
         </button>
         {breadcrumb && (
-          <Link to={breadcrumb.to} className="header-breadcrumb-link">
+          <Link to={breadcrumb.to} className="header-breadcrumb-link text-truncate">
             {breadcrumb.label}
           </Link>
         )}
-        {title && <span className="header-title-text">{title}</span>}
-        {!breadcrumb && !title && <span className="header-title-text">管理者詳細画面</span>}
+        {title && <span className="header-title-text text-truncate">{title}</span>}
+        {!breadcrumb && !title && <span className="header-title-text text-truncate">管理者詳細画面</span>}
       </div>
 
       {/* 右側：動画投稿タグ／アクション＋アカウントアイコン＋ドロップダウン */}
-      <div className="d-flex align-items-center gap-3">
+      <div className="d-flex align-items-center gap-3 admin-header__end">
         {pathname === "/admin/videos" && (
           <Link to="/admin/videos/new" className="text-decoration-none admin-header-link">
             動画投稿

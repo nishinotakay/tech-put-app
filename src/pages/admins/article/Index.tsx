@@ -165,7 +165,7 @@ export default function AdminArticleIndexPage() {
         {sortAnnouncement}
       </p>
 
-      <div className="card shadow-sm">
+      <div className="card shadow-sm admin-table-scroll">
         <table className="table table-hover mb-0">
           <thead className="table-light">
             <tr>

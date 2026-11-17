@@ -84,7 +84,7 @@ export default function AdminUserArticlesPage() {
       {articles.length === 0 ? (
         <p className="text-muted text-center py-5">記事の投稿はまだありません</p>
       ) : (
-        <div className="card shadow-sm">
+        <div className="card shadow-sm admin-table-scroll">
           <table className="table table-hover mb-0">
             <thead className="table-light">
               <tr>

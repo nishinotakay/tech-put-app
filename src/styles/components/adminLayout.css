@@ -153,6 +153,16 @@
   padding: 4px 10px;
 }
 
+/* ヘッダー左（≡＋見出し）は縮めて長い見出しを省略し、右（ボタン・アバター）は縮めない */
+.admin-header__start {
+  min-width: 0;
+}
+
+.admin-header__end {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 .admin-main {
   margin-left: var(--admin-sidebar-width);
   transition: margin-left 0.25s ease;
@@ -170,4 +180,53 @@
 
 .admin-header-link:hover {
   color: #333;
+}
+
+/* スマホ幅（768px 未満）では左メニューを画面の外に置き、≡ で引き出す */
+@media (max-width: 767.98px) {
+  .admin-sidebar {
+    z-index: 1040;
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition: transform 0.2s ease, visibility 0.2s;
+  }
+
+  .admin-sidebar.is-mobile-open {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  .admin-main,
+  .admin-main--expanded {
+    margin-left: 0;
+    min-width: 0;
+  }
+}
+
+.admin-sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1035;
+  border: none;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* 管理画面の表：スマホ幅は枠の中で横スクロールし、⋮ メニューを開いている間は下に余白を足す */
+@media (max-width: 767.98px) {
+  .admin-table-scroll {
+    overflow-x: auto;
+  }
+
+  .admin-table-scroll > .table {
+    min-width: 600px;
+  }
+
+  .admin-table-scroll:has(.dropdown-menu.show) {
+    padding-bottom: 8rem;
+  }
+}
+
+.admin-table-scroll th {
+  white-space: nowrap;
 }
