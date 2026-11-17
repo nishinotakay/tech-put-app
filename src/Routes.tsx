@@ -12,6 +12,9 @@ import ArticlePostPage from './pages/users/article/Post';
 import ArticleIndexPage from './pages/users/article/Index';
 import ArticleEditPage from './pages/users/article/Edit';
 import ArticleShowPage from './pages/users/article/Show';
+import UserShowPage from './pages/users/user/Show';
+import FollowListPage from './pages/users/user/FollowList';
+import UserIndexPage from './pages/users/user/Index';
 
 // 管理者用ページ
 import AdminLoginPage from './pages/admins/AdminLoginPage';
@@ -65,6 +68,10 @@ function AppRoutes() {
         <Route path="/articles/new" element={<ArticlePostPage />} />
         <Route path="/articles/:id/edit" element={<ArticleEditPage />} />
         <Route path="/articles/:id" element={<ArticleShowPage />} />
+        <Route path="/profiles" element={<UserIndexPage />} />
+        <Route path="/users/:id/followings" element={<FollowListPage kind="followings" />} />
+        <Route path="/users/:id/followers" element={<FollowListPage kind="followers" />} />
+        <Route path="/users/:id" element={<UserShowPage />} />
 
         {/* 管理者用ルート */}
         <Route path="/admin/login" element={<AdminLoginPage />} />

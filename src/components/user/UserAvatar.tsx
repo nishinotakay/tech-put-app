@@ -4,7 +4,7 @@
 import "../../styles/components/userAvatar.css";
 
 type Props = {
-  size?: "sm" | "md"; // sm: 28px（ヘッダー用）/ md: 36px（カード用）
+  size?: "sm" | "md"| "lg"; // sm: 28px（ヘッダー用）/ md: 36px（カード用）/ lg; 64px (受講生ページ用)
 };
 
 export default function UserAvatar({ size = "sm" }: Props) {
