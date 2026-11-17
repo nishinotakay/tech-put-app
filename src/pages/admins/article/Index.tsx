@@ -205,7 +205,7 @@ export default function AdminArticleIndexPage() {
                         ⋮
                       </button>
                       {openMenuId === article.id && (
-                        <ul className="dropdown-menu show position-absolute">
+                        <ul className="dropdown-menu show position-absolute end-0">
                           <li>
                             <Link
                               className="dropdown-item"
