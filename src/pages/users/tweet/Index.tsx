@@ -4,6 +4,7 @@
 // IndexedDB から Rails API へ移行したため、画像は Active Storage の URL で表示する。
 // UserLayout の render-prop から me を受け取るため、useRequireAuth の二重呼び出しを解消している。
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { createTweet, deleteTweet, getTweets, updateTweet, likeTweet, unlikeTweet, addComment } from "../../../lib/tweetsStore";
 import { getApiErrorMessage } from "../../../lib/api";
 // 日付整形はページ内の重複実装を廃止し、共通ユーティリティ formatDate を使う（DRY原則）
@@ -253,7 +254,9 @@ function TweetsContent({ me }: { me: User }) {
                         <div className="tweets-page__avatar" />
                         <div>
                           {/* ユーザー名 */}
-                          <div className="fw-bold tweets-page__user-name">{tweet.userName}</div>
+                          <div className="fw-bold tweets-page__user-name">
+                            <Link to={`/users/${tweet.userId}`}>{tweet.userName}</Link>
+                          </div>
                           {/* 投稿日時 */}
                           <div className="text-muted tweets-page__date">
                             {formatDate(tweet.createdAt)}
@@ -361,7 +364,9 @@ function TweetsContent({ me }: { me: User }) {
                             {tweet.comments.map((comment) => (
                               <div key={comment.id} className="tweets-page__comment-item">
                                 <span>
-                                  <span className="fw-bold me-2">{comment.userName}</span>
+                                  <Link to={`/users/${comment.userId}`} className="fw-bold me-2">
+                                    {comment.userName}
+                                  </Link>
                                   {comment.content}
                                 </span>
                                 <span className="tweets-page__comment-date">
