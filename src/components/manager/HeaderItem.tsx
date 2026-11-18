@@ -23,7 +23,6 @@ export default function HeaderItem({ manager, dropdownOpen, setDropdownOpen, onL
     >
       {/* 左側：ハンバーガー＋タイトル＋アクション */}
       <div className="d-flex align-items-center gap-3 admin-header__start">
-
         <button
           type="button"
           className="hamburger-btn me-md-3 flex-shrink-0"

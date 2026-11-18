@@ -52,7 +52,7 @@ export default function ManagerLayout({ manager, onLogout, children, headerTitle
           />
         )}
         <ManagerSidebar
-          isOpen={sidebarOpen}
+          isOpen={sidebarOpen || isMobileMenuOpen}
           isMobileOpen={isMobileMenuOpen}
           onNavigate={() => setIsMobileMenuOpen(false)}
         />

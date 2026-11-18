@@ -53,7 +53,7 @@ export default function AdminLayout({ admin, onLogout, children, headerTitle, he
           />
         )}
         <AdminSidebar
-          isOpen={sidebarOpen}
+          isOpen={sidebarOpen || isMobileMenuOpen}
           isMobileOpen={isMobileMenuOpen}
           onNavigate={() => setIsMobileMenuOpen(false)}
         />
