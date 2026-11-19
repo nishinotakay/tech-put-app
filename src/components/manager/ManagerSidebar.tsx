@@ -10,13 +10,15 @@ const menuItems = [
 
 type Props = {
   isOpen: boolean;
+  isMobileOpen: boolean;
+  onNavigate: () => void;
 };
 
-export default function ManagerSidebar({ isOpen }: Props) {
+export default function ManagerSidebar({ isOpen, isMobileOpen, onNavigate }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <div className={`text-white p-3 d-flex flex-column admin-sidebar${isOpen ? "" : " admin-sidebar--collapsed"}`}>
+    <div className={`text-white p-3 d-flex flex-column admin-sidebar${isOpen ? "" : " admin-sidebar--collapsed"}${isMobileOpen ? " is-mobile-open" : ""}`}>
       <div className="mb-4 pb-3 admin-sidebar__title-area">
         <h5 className="mb-0 admin-sidebar__title">TecPuttマネージャー画面</h5>
       </div>
@@ -40,7 +42,7 @@ export default function ManagerSidebar({ isOpen }: Props) {
       </div>
 
       {/* メニュー項目 */}
-      <ul className="list-unstyled flex-grow-1 admin-sidebar-menu">
+      <ul className="list-unstyled flex-grow-1 admin-sidebar-menu" onClick={onNavigate}>
         {menuItems.map((item) => (
           <SidebarItem key={item.id} label={item.label} to={item.to} icon={item.icon} />
         ))}

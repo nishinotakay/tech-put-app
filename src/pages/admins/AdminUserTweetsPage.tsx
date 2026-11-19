@@ -61,12 +61,12 @@ export default function AdminUserTweetsPage() {
   return (
     <AdminLayout admin={admin} onLogout={handleLogout}>
       {/* 提出済みの遷移図に合わせ、つぶやき一覧の見出しには敬称を付けない。 */}
-      <div className="d-flex align-items-center gap-3 mb-4">
+      <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
         <h4 className="mb-0">
           {userName ? `${userName}のつぶやき一覧` : "受講生のつぶやき一覧"}
         </h4>
-        <button className="btn btn-success btn-sm">並べ替え</button>
-        <button className="btn btn-success btn-sm">絞り込み検索</button>
+        <button className="btn btn-success btn-sm text-nowrap">並べ替え</button>
+        <button className="btn btn-success btn-sm text-nowrap">絞り込み検索</button>
       </div>
 
       {/* つぶやき一覧 */}

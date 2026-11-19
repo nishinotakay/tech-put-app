@@ -76,25 +76,25 @@ export default function TenantDetailPage() {
                     </dd>
                   </dl>
 
-                  <div className="d-flex justify-content-center gap-2">
+                  <div className="d-flex flex-wrap justify-content-center gap-2">
                     <a
                       href={`/tenant/${tenant.id}/users/login`}
                       target="_blank"
                       rel="noreferrer"
-                      className="btn btn-primary btn-sm"
+                      className="btn btn-primary btn-sm text-nowrap"
                     >
                       テナントログイン
                     </a>
                     <button
                       type="button"
-                      className="btn btn-outline-primary btn-sm"
+                      className="btn btn-outline-primary btn-sm text-nowrap"
                       onClick={() => navigate(`/manager/tenants/${tenant.id}/edit`)}
                     >
                       編集
                     </button>
                     <button
                       type="button"
-                      className="btn btn-secondary btn-sm"
+                      className="btn btn-secondary btn-sm text-nowrap"
                       onClick={() => navigate("/manager/dashboard")}
                     >
                       ダッシュボードへ戻る

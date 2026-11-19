@@ -14,7 +14,7 @@ type Props = {
 export default function HeaderItem({ manager, dropdownOpen, setDropdownOpen, onLogout, onToggleSidebar, title, action }: Props) {
   return (
     <div
-      className="d-flex justify-content-between align-items-center px-4"
+      className="d-flex justify-content-between align-items-center gap-2 px-3 px-md-4"
       style={{
         backgroundColor: "#ffffff",
         borderBottom: "1px solid #dee2e6",
@@ -22,10 +22,10 @@ export default function HeaderItem({ manager, dropdownOpen, setDropdownOpen, onL
       }}
     >
       {/* 左側：ハンバーガー＋タイトル＋アクション */}
-      <div className="d-flex align-items-center gap-3">
+      <div className="d-flex align-items-center gap-3 admin-header__start">
         <button
           type="button"
-          className="hamburger-btn me-3"
+          className="hamburger-btn me-md-3 flex-shrink-0"
           onClick={onToggleSidebar}
           aria-label="サイドバーを開閉"
         >
@@ -36,12 +36,12 @@ export default function HeaderItem({ manager, dropdownOpen, setDropdownOpen, onL
             />
           </svg>
         </button>
-        {title && <span className="header-title-text">{title}</span>}
-        {!title && <span className="header-title-text">マネージャー画面</span>}
+        {title && <span className="header-title-text text-truncate">{title}</span>}
+        {!title && <span className="header-title-text text-truncate">マネージャー画面</span>}
       </div>
 
       {/* 右側：アクション＋アカウントアイコン＋ドロップダウン */}
-      <div className="d-flex align-items-center gap-3">
+      <div className="d-flex align-items-center gap-3 admin-header__end">
         {action && <div>{action}</div>}
         <div className="position-relative">
           <button

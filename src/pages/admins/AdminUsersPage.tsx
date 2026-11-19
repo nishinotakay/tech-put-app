@@ -203,18 +203,18 @@ export default function AdminUsersPage() {
       <FlashMessage flash={flash} onClose={clearFlash} />
 
       {/* 見出し・検索条件 */}
-      <div className="d-flex align-items-center gap-3 mb-4">
+      <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
         <h4 className="mb-0">登録ユーザー一覧</h4>
-        <button className="btn btn-success btn-sm" onClick={openSortModal}>
+        <button className="btn btn-success btn-sm text-nowrap" onClick={openSortModal}>
           並べ替え
         </button>
-        <button className="btn btn-success btn-sm" onClick={openFilterModal}>
+        <button className="btn btn-success btn-sm text-nowrap" onClick={openFilterModal}>
           絞り込み検索
         </button>
       </div>
 
       {/* 登録ユーザー一覧 */}
-      <div className="card shadow-sm">
+      <div className="card shadow-sm admin-table-scroll">
         <table className="table table-hover mb-0">
           <thead className="table-light">
             <tr>
