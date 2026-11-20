@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import AdminLayout from '../../../components/admin/AdminLayout'
 import CategoryList from '../../../components/admin/CategoryList'
@@ -27,6 +27,8 @@ export default function AdminCategoryIndexPage() {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [categoryName, setCategoryName] = useState('')
   const [createError, setCreateError] = useState('')
+  const [creating, setCreating] = useState(false)
+  const createInProgress = useRef(false)
 
   function openCreateModal() {
     setCategoryName('')
@@ -35,10 +37,12 @@ export default function AdminCategoryIndexPage() {
   }
 
   function closeCreateModal() {
+    if (createInProgress.current) return
     setShowCreateModal(false)
   }
 
   async function handleCreateCategory() {
+    if (createInProgress.current) return
     const name = categoryName.trim()
     if (!name) {
       setCreateError('カテゴリー名を入力してください。')
@@ -49,17 +53,21 @@ export default function AdminCategoryIndexPage() {
       setCreateError('コースIDがありません。')
       return
     }
-  
-    try{
-      const data = await createCategory(courseId,name)
+    createInProgress.current = true
+    setCreating(true)
+    setCreateError('')
+
+    try {
+      const data = await createCategory(courseId, name)
       setCategories(previous => [...previous, data])
       setCategoryName('')
-      closeCreateModal()
+      setShowCreateModal(false)
     } catch {
       setCreateError('カテゴリーの作成に失敗しました。')
+    } finally {
+      createInProgress.current = false
+      setCreating(false)
     }
-    
-    closeCreateModal()
   }
 
   useEffect(() => {
@@ -194,11 +202,11 @@ export default function AdminCategoryIndexPage() {
         titleId="category-create-title"
         footer={
           <>
-            <button type="button" className="btn btn-outline-secondary" onClick={closeCreateModal}>
+            <button type="button" className="btn btn-outline-secondary" onClick={closeCreateModal} aria-disabled={creating}>
               キャンセル
             </button>
-            <button type="submit" className="btn btn-primary" form="category-create-form">
-              作成する
+            <button type="submit" className="btn btn-primary" form="category-create-form" disabled={creating}>
+              {creating ? '作成中…' : '作成する'}
             </button>
           </>
         }
@@ -222,6 +230,7 @@ export default function AdminCategoryIndexPage() {
             }}
             placeholder="例：基本文法"
             required
+            disabled={creating}
             maxLength={255}
             aria-invalid={!!createError}
             aria-describedby={createError ? 'category-create-error' : undefined}
