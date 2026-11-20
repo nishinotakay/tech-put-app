@@ -207,6 +207,7 @@ export default function AdminCourseIndexPage() {
                   <h2>{course.name}</h2>
                 )}
                 <div className="course-index__actions">
+                  <button type="button" className="btn btn-primary fw-bold" onClick={() => navigate(`/admin/courses/${course.id}/categories`, { state: { courseName: course.name } })}>カテゴリー管理 →</button>
                   <button type="button" className="text-info-emphasis fw-bold" disabled={editSaving || editingCourse?.id === course.id} onClick={() => startEditing(course)}>コース名を編集</button>
                   <button type="button" className="course-index__delete fw-bold" disabled={deletingId !== null || editSaving} onClick={()=>handleDeleteCourse(course.id)}>
                     {deletingId === course.id ? '削除中…' : 'コースを削除'}
