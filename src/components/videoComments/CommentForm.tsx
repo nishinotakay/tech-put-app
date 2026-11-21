@@ -45,7 +45,7 @@ export default function CommentForm({ ariaLabel, submitLabel, initialContent = "
 
   const handleEscape = () => {
     if (!onCancel || submitting) return;
-    if (content !== "" && !window.confirm("入力中の内容を破棄しますか？")) return;
+    if (content !== initialContent &&!window.confirm("入力中の内容を破棄しますか？")) return;
     onCancel();
   };
 
