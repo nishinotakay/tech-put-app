@@ -47,3 +47,30 @@ export async function getCurrentUser(): Promise<User | null> {
     throw err
   }
 }
+
+export type UserPost = {
+  id: string
+  title: string
+  body: string
+  youtubeUrl: string
+  userId: string | null
+  adminId: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+export async function getUserPosts(): Promise<UserPost[]> {
+  const res = await api.get<{ posts: UserPost[] }>('/posts')
+  return res.data.posts
+}
+
+// 404 は「動画が無い」ため undefined を返し、それ以外は呼び出し側でエラー表示する
+export async function getUserPost(id: string): Promise<UserPost | undefined> {
+  try {
+    const res = await api.get<{ post: UserPost }>(`/posts/${id}`)
+    return res.data.post
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response?.status === 404) return undefined
+    throw err
+  }
+}
