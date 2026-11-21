@@ -42,7 +42,7 @@ export default function UserIndexPage() {
           {loadStatus === "loaded" && (
             <ul className="list-group">
               {users.map((user) => (
-                <FollowUserListItem key={user.id} user={user} onFollowChange={handleFollowChange} />
+                <FollowUserListItem key={user.id} user={user} onFollowChange={handleFollowChange} showChatButton />
               ))}
             </ul>
           )}
