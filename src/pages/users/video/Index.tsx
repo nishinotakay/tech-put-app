@@ -6,7 +6,7 @@ import { formatVideoDate } from "../../../lib/formatDate";
 import type { LoadStatus } from "../../../lib/loadStatus";
 import { getUserPosts, type UserPost } from "../../../lib/userApi";
 import { getYouTubeVideoId } from "../../../lib/youtube";
-import "../../../styles/components/videoCommentThread.css";
+import "../../../styles/components/videoSummary.css";
 
 export default function VideoIndexPage() {
   const [videos, setVideos] = useState<UserPost[]>([]);

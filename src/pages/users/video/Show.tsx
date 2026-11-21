@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import UserLayout, { dashboardMenu } from "../../../components/user/UserLayout";
-import VideoCommentThread from "../../../components/VideoCommentThread";
+import VideoCommentThread from "../../../components/videoComments/VideoCommentThread";
 import { getApiErrorMessage } from "../../../lib/api";
 import { formatVideoDate } from "../../../lib/formatDate";
 import type { LoadStatus } from "../../../lib/loadStatus";
 import { getUserPost, type UserPost } from "../../../lib/userApi";
 import { getYouTubeVideoId } from "../../../lib/youtube";
-import "../../../styles/components/videoCommentThread.css";
+import "../../../styles/components/videoSummary.css";
 
 export default function VideoShowPage() {
   const { id } = useParams<{ id: string }>();
@@ -75,7 +75,7 @@ export default function VideoShowPage() {
                     </div>
                   )}
                   <p className="video-description text-break">{video.body}</p>
-                  <VideoCommentThread role="user" postId={id} />
+                  <VideoCommentThread key={id} role="user" postId={id} />
                 </div>
               </div>
             )}

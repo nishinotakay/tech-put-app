@@ -229,22 +229,22 @@ export default function AdminVideoIndexPage() {
                                   動画コメント
                                 </button>
                                 {(video.userId !== null || video.adminId === admin?.id) && (
-                                <>
-                                <button
-                                  type="button"
-                                  className="btn btn-link btn-sm w-100 text-start px-3 py-2 video-menu-item"
-                                  onClick={(e) => { e.stopPropagation(); navigate(`/admin/videos/${video.id}/edit`); }}
-                                >
-                                  編集
-                                </button>
-                                <button
-                                  type="button"
-                                  className="btn btn-link btn-sm text-danger w-100 text-start px-3 py-2 video-menu-item"
-                                  onClick={(e) => { e.stopPropagation(); handleDelete(video.id); }}
-                                >
-                                  削除
-                                </button>
-                                </>
+                                  <>
+                                    <button
+                                      type="button"
+                                      className="btn btn-link btn-sm w-100 text-start px-3 py-2 video-menu-item"
+                                      onClick={(e) => { e.stopPropagation(); navigate(`/admin/videos/${video.id}/edit`); }}
+                                    >
+                                      編集
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="btn btn-link btn-sm text-danger w-100 text-start px-3 py-2 video-menu-item"
+                                      onClick={(e) => { e.stopPropagation(); handleDelete(video.id); }}
+                                    >
+                                      削除
+                                    </button>
+                                  </>
                                 )}
                               </div>
                             </>

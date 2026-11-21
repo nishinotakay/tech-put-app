@@ -6,11 +6,11 @@ import { getApiErrorMessage } from "../../../lib/api";
 import AdminLayout from "../../../components/admin/AdminLayout";
 import PageSpinner from "../../../components/admin/PageSpinner";
 import PageError from "../../../components/admin/PageError";
-import VideoCommentThread from "../../../components/VideoCommentThread";
+import VideoCommentThread from "../../../components/videoComments/VideoCommentThread";
 import { formatVideoDate } from "../../../lib/formatDate";
 import { getYouTubeVideoId } from "../../../lib/youtube";
 import { useRequireAdmin } from "../../../lib/useRequireAdmin";
-import "../../../styles/components/videoCommentThread.css";
+import "../../../styles/components/videoSummary.css";
 
 export default function AdminVideoCommentsPage() {
   const navigate = useNavigate();
@@ -23,6 +23,9 @@ export default function AdminVideoCommentsPage() {
   useEffect(() => {
     if (!admin || !id) return;
     let cancelled = false;
+    setVideo(null);
+    setVideoReady(false);
+    setLoadErrorMessage("");
     getAdminPost(id)
       .then((post) => {
         if (!cancelled) setVideo(post);
@@ -78,7 +81,7 @@ export default function AdminVideoCommentsPage() {
                 </div>
               </div>
 
-              <VideoCommentThread role="admin" postId={id} />
+              <VideoCommentThread key={id} role="admin" postId={id} />
 
               <div className="d-flex gap-2 justify-content-end mt-4">
                 <button type="button" className="btn btn-secondary btn-sm" onClick={() => navigate("/admin/videos")}>
