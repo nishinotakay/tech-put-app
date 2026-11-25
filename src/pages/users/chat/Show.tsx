@@ -84,8 +84,12 @@ export default function ChatRoomShowPage() {
     setIsSending(true);
     setSendError("");
     try {
-      const sentMessage = await sendChatMessage(chatRoomId, draft);
-      setMessages((currentMessages) => appendNewMessages(currentMessages, [sentMessage]));
+      await sendChatMessage(chatRoomId, draft);
+      // 取り直しに失敗しても、次の 5 秒の取得で同じ範囲を拾える
+      const roomMessages = await fetchChatMessages(chatRoomId, lastMessageId).catch(() => null);
+      if (roomMessages) {
+        setMessages((currentMessages) => appendNewMessages(currentMessages, roomMessages.chatMessages));
+      }
       setDraft("");
     } catch (err) {
       const isValidationError = axios.isAxiosError(err) && err.response?.status === 422;
