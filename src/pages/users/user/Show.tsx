@@ -4,6 +4,7 @@ import axios from "axios";
 import UserLayout, { dashboardMenu } from "../../../components/user/UserLayout";
 import UserAvatar from "../../../components/user/UserAvatar";
 import FollowButton from "../../../components/user/FollowButton";
+import ChatStartButton from "../../../components/user/ChatStartButton";
 import { fetchUserProfile, type FollowUserProfile } from "../../../lib/followApi";
 import type { LoadStatus } from "../../../lib/loadStatus";
 import { buildUserPageHeading } from "../../../lib/pageHeading";
@@ -62,12 +63,15 @@ export default function UserShowPage() {
                   <h2 className="h5 fw-bold mb-0 follow-user-name">{profile.name}</h2>
                 </div>
                 {!profile.isCurrentUser && (
-                  <FollowButton
-                    userId={profile.id}
-                    userName={profile.name}
-                    followed={profile.followedByCurrentUser}
-                    onChange={setProfile}
-                  />
+                  <div className="d-flex flex-wrap justify-content-end align-items-start gap-2">
+                    {profile.followedByCurrentUser && <ChatStartButton userId={profile.id} />}
+                    <FollowButton
+                      userId={profile.id}
+                      userName={profile.name}
+                      followed={profile.followedByCurrentUser}
+                      onChange={setProfile}
+                    />
+                  </div>
                 )}
               </div>
               <div className="d-flex flex-wrap gap-4">

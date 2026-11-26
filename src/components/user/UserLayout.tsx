@@ -18,6 +18,7 @@ export const dashboardMenu: MenuItem[] = [
   { label: "記事一覧", to: "/articles", icon: "fa-solid fa-newspaper" },
   { label: "プロフィール一覧", to: "/profiles", icon: "fa-solid fa-address-card" },
   { label: "つぶやき一覧", to: "/tweets", icon: "fa-brands fa-twitter" },
+  { label: "チャット", to: "/chat_rooms", icon: "fa-regular fa-comments" },
   { label: "問い合わせ", to: "/inquiries", icon: "fa-solid fa-circle-info" },
 ];
 
