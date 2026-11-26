@@ -14,7 +14,7 @@
 ## 必須ルール（入口）
 
 - 3 ステップ以上の実装は `/develop` から入る。新規機能で要件が未確定なら、実装前に要件・仕様を文章で確定する
-- git 操作の前に `.claude/rules/git/` を守る。ステージングはファイル名を明示し、`docs/` `.claude/` `tmp/` `log/` はコミットしない
+- git 操作の前に `.claude/rules/git/` を守る。ステージングはファイル名を明示し、`docs/` `tmp/` `log/` はコミットしない。`CLAUDE.md` と `.claude/` は共有ルールで、社長が指示したときだけルール変更の PR で直す
 - 「レビューして」は `/code-review`。「動作確認して」は Playwright で実際に画面を開いて確認し、結果を報告する
 - 重要な設計判断（方針変更・DB 変更・API 変更・複数案の選択）は `/dual-ai` で Codex の第二意見を取る
 - 命名を略さない。`u` / `tmp` / `data` / `res` のような名前を使わず、意図が読める名前を付ける。1〜2 文字は 3 行以内のスコープのみ
@@ -33,9 +33,9 @@
 | 技術 | React 18 / Vite 4 / TypeScript 4.9 / react-router-dom 7 / axios / Bootstrap 5 + 自作 CSS（Tailwind は無効） | Rails 6.1 / Ruby 3.0.3 / MySQL 8 / RSpec / JWT（`api/v1`）+ Devise（旧 ERB 画面）。README の Rails 7 表記は古い |
 | 起動 | `npm install` → `npm run dev`（http://localhost:5173） | `docker compose up -d`。ホスト側ポートは `docker-compose.yml` の `ports` を正とする（2026-10 時点 3013） |
 | 検証 | `npm run build`（`tsc && vite build`）。lint・テストランナーは無い。画面は Playwright | `bundle exec rspec` / `rubocop` / `brakeman -q`。CI は無いので自分で回す |
-| 統合先 | `origin/main`（`1107t/tech-put-app`）。作業ブランチ `feature/` `fix/` | `origin/develop`（`nishinotakay/teac-output-new`）。e-learning は `feature/React` 系。作業ブランチ `feat/` `fix/` |
+| 統合先 | `origin/main`（`nishinotakay/tech-put-app`）。作業ブランチ `feature/` `fix/` | `origin/develop`（`nishinotakay/teac-output-new`）。e-learning は `feature/React` 系。作業ブランチ `feat/` `fix/` |
 | 相手側 | API 向き先は `VITE_API_URL`。型は `*_json` と一致させる | `Current.tenant` をログイン主体から決め、モデルは `default_scope { in_current_tenant }`。マイグレーション・seed では nil |
 
-- 両方に跨る変更は **バックエンド PR → フロント PR** の順。バックエンド PR は旧フロントのままでも動く変更に限る（フィールドは足すだけ。改名・削除しない）
+- フロントとバックエンドの両方を変える機能は、PR を同時に出してよい（本文で互いの PR 番号をリンクする）。**マージはバックエンド PR → フロント PR の順**。バックエンド PR は旧フロントのままでも動く変更に限る（フィールドは足すだけ。改名・削除しない）
 - 共通の事実（ロール・URL・API 契約・テナント契約・テストアカウント）は `.claude/rules/project/techput-overview.md`。各リポジトリの詳細は `frontend.md` / `backend.md`
 - `src/` を触ると React / CSS / フロントのセキュリティ規則、`app/` `spec/` `db/migrate/` を触ると Rails / RSpec / マイグレーション / 認可の規則が追加で読み込まれる
