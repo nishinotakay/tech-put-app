@@ -84,7 +84,7 @@ export default function AdminUserArticlesPage() {
       {articles.length === 0 ? (
         <p className="text-muted text-center py-5">記事の投稿はまだありません</p>
       ) : (
-        <div className="card shadow-sm admin-table-scroll">
+        <div className="card shadow-sm admin-table-cards">
           <table className="table table-hover mb-0">
             <thead className="table-light">
               <tr>
@@ -97,7 +97,7 @@ export default function AdminUserArticlesPage() {
               {articles.map((article) => (
                 <tr key={article.id}>
                   {/* 誤操作を避けるため、行全体ではなくタイトルだけを遷移対象にする。 */}
-                  <td className="fw-semibold">
+                  <td className="fw-semibold" data-label="タイトル">
                     <button
                       type="button"
                       className="btn btn-link p-0 text-decoration-none fw-semibold text-start"
@@ -106,10 +106,10 @@ export default function AdminUserArticlesPage() {
                       {article.title}
                     </button>
                   </td>
-                  <td className="text-muted">
+                  <td className="text-muted" data-label="内容（プレビュー）">
                     {truncateText(article.content, 80)}
                   </td>
-                  <td className="text-nowrap text-muted">
+                  <td className="text-nowrap text-muted" data-label="投稿日時">
                     {formatDate(article.createdAt)}
                   </td>
                 </tr>

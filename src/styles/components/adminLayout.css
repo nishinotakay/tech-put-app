@@ -212,21 +212,67 @@
   background: rgba(0, 0, 0, 0.4);
 }
 
-/* 管理画面の表：スマホ幅は枠の中で横スクロールし、⋮ メニューを開いている間は下に余白を足す */
-@media (max-width: 767.98px) {
-  .admin-table-scroll {
-    overflow-x: auto;
-  }
-
-  .admin-table-scroll > .table {
-    min-width: 600px;
-  }
-
-  .admin-table-scroll:has(.dropdown-menu.show) {
-    padding-bottom: 8rem;
-  }
+/* 管理画面の表：スマホ幅だけ 1 行を 1 枚のカードにする（列名は各セルの data-label） */
+.admin-table-cards th {
+  white-space: nowrap;
 }
 
-.admin-table-scroll th {
-  white-space: nowrap;
+.admin-table-cards__menu {
+  position: relative;
+}
+
+@media (max-width: 767.98px) {
+  .card.admin-table-cards {
+    background: transparent;
+    border: 0;
+    box-shadow: none !important;
+  }
+
+  .admin-table-cards > .table > thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .admin-table-cards > .table,
+  .admin-table-cards > .table > tbody {
+    display: block;
+  }
+
+  .admin-table-cards > .table > tbody > tr {
+    display: block;
+    position: relative;
+    margin-bottom: 12px;
+    padding: 12px 44px 12px 16px;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.175);
+    border-radius: 8px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+
+  .admin-table-cards > .table > tbody > tr > td {
+    display: block;
+    padding: 4px 0;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-table-cards > .table > tbody > tr > td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.75rem;
+    color: #6c757d;
+  }
+
+  .admin-table-cards > .table > tbody > tr > td.admin-table-cards__menu {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 4px 8px;
+  }
 }
