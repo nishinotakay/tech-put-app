@@ -165,7 +165,7 @@ export default function AdminArticleIndexPage() {
         {sortAnnouncement}
       </p>
 
-      <div className="card shadow-sm admin-table-scroll">
+      <div className="card shadow-sm admin-table-cards">
         <table className="table table-hover mb-0">
           <thead className="table-light">
             <tr>
@@ -190,10 +190,10 @@ export default function AdminArticleIndexPage() {
                   style={{ cursor: "pointer" }}
                   onClick={() => handleRowClick(article.id)}
                 >
-                  <td>{article.title}</td>
-                  <td>{article.subTitle}</td>
-                  <td>{formatDate(article.createdAt)}</td>
-                  <td className="position-relative" onClick={(e) => e.stopPropagation()}>
+                  <td data-label="タイトル">{article.title}</td>
+                  <td data-label="サブタイトル">{article.subTitle}</td>
+                  <td data-label="投稿日時">{formatDate(article.createdAt)}</td>
+                  <td className="admin-table-cards__menu" onClick={(e) => e.stopPropagation()}>
                     <>
                       <button
                         className="btn btn-sm text-secondary p-0"

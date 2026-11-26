@@ -214,7 +214,7 @@ export default function AdminUsersPage() {
       </div>
 
       {/* 登録ユーザー一覧 */}
-      <div className="card shadow-sm admin-table-scroll">
+      <div className="card shadow-sm admin-table-cards">
         <table className="table table-hover mb-0">
           <thead className="table-light">
             <tr>
@@ -236,7 +236,7 @@ export default function AdminUsersPage() {
             ) : (
               displayedUsers.map((user) => (
                 <tr key={user.id}>
-                  <td>
+                  <td data-label="名前">
                     {user.name}
                     {user.cancelledAt && (
                       <span className="badge bg-secondary ms-2">
@@ -244,8 +244,8 @@ export default function AdminUsersPage() {
                       </span>
                     )}
                   </td>
-                  <td>{user.email}</td>
-                  <td>
+                  <td data-label="email">{user.email}</td>
+                  <td data-label="記事投稿数">
                     <button
                       className="btn btn-link p-0 text-decoration-none"
                       onClick={() => navigate(`/admin/users/${user.id}/articles`)}
@@ -253,7 +253,7 @@ export default function AdminUsersPage() {
                       {user.articlesCount}
                     </button>
                   </td>
-                  <td>
+                  <td data-label="動画投稿数">
                     <button
                       className="btn btn-link p-0 text-decoration-none"
                       onClick={() => navigate(`/admin/users/${user.id}/posts`)}
@@ -261,7 +261,7 @@ export default function AdminUsersPage() {
                       {user.postsCount}
                     </button>
                   </td>
-                  <td>
+                  <td data-label="つぶやき投稿数">
                     <button
                       className="btn btn-link p-0 text-decoration-none"
                       onClick={() => navigate(`/admin/users/${user.id}/tweets`)}
@@ -269,7 +269,7 @@ export default function AdminUsersPage() {
                       {user.tweetsCount}
                     </button>
                   </td>
-                  <td className="text-center position-relative">
+                  <td className="text-center admin-table-cards__menu">
                     {/* 外クリックで閉じる処理と競合しないよう、メニュー内のクリック伝播を止める。 */}
                     <button
                       className="btn btn-sm btn-link text-secondary p-0"
