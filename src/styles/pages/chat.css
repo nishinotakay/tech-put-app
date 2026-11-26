@@ -1,0 +1,53 @@
+/* チャット一覧と部屋の幅を、プロフィール側の画面とそろえる */
+.chat-page {
+  max-width: 720px;
+}
+
+/* 長い名前・本文があっても、右の日時を押し出さない */
+.chat-room-summary {
+  min-width: 0;
+}
+
+.chat-one-line {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 発言が増えても入力欄が画面外へ出ないよう、発言の欄だけをスクロールさせる */
+.chat-message-list {
+  height: 60vh;
+  overflow-y: auto;
+  background: var(--bs-light);
+}
+
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.chat-message--mine {
+  align-items: flex-end;
+}
+
+/* 改行をそのまま見せ、長い文・URL は吹き出しの中で折り返す */
+.chat-bubble {
+  max-width: 75%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.chat-message--mine .chat-bubble {
+  background: var(--bs-success);
+  color: var(--bs-white);
+}
+
+.chat-message--partner .chat-bubble {
+  background: var(--bs-white);
+  border: 1px solid var(--bs-border-color);
+}
