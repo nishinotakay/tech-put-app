@@ -6,47 +6,20 @@ import type { AdminUser } from "../../lib/userTypes";
 import AdminLayout from "../../components/admin/AdminLayout";
 import PageSpinner from "../../components/admin/PageSpinner";
 import PageError from "../../components/admin/PageError";
-import Modal from "../../components/shared/Modal";
 import { useRequireAdmin } from "../../lib/useRequireAdmin";
+import UserSortModal, { DEFAULT_SORT_CRITERION, type SortCriterion } from "../../components/admin/UserSortModal"
+import UserFilterModal, { EMPTY_FILTER, type FilterCondition } from "../../components/admin/UserFilterModal"
+import UserRowMenu from "../../components/admin/UserRowMenu"
 import {
   createCreatedAtComparator,
   createNameComparator,
-  isSortOrder,
   DEFAULT_SORT_ORDER,
-  DATE_SORT_ORDER_OPTIONS,
   type SortOrder,
 } from "../../lib/sort";
 import FlashMessage from "../../components/shared/FlashMessage"
 import { useFlash } from "../../lib/useFlash"
 import type { LoadStatus } from "../../lib/loadStatus"
 import { formatSlashDate } from "../../lib/formatDate"
-
-// 型と実行時の検証で、許可する並べ替え基準を共有する。
-const SORT_CRITERIA = ["createdAt", "name"] as const
-type SortCriterion = (typeof SORT_CRITERIA)[number]
-
-function isSortCriterion(value: string): value is SortCriterion {
-  return SORT_CRITERIA.some((sortCriterion) => sortCriterion === value)
-}
-
-const DEFAULT_SORT_CRITERION: SortCriterion = "createdAt"
-
-const USER_STATUS_FILTERS = ["all", "active", "cancelled"] as const
-type UserStatusFilter = (typeof USER_STATUS_FILTERS)[number]
-
-function isUserStatusFilter(value: string): value is UserStatusFilter {
-  return USER_STATUS_FILTERS.some((userStatusFilter) => userStatusFilter === value)
-}
-
-interface FilterCondition {
-  name: string       // 名前（部分一致）
-  email: string      // メールアドレス（部分一致）
-  fromDate: string   // 登録日（から）YYYY-MM-DD形式
-  toDate: string     // 登録日（まで）YYYY-MM-DD形式
-  status: UserStatusFilter
-}
-
-const EMPTY_FILTER: FilterCondition = { name: "", email: "", fromDate: "", toDate: "", status: "all" }
 
 export default function AdminUsersPage() {
   const navigate = useNavigate()
@@ -62,15 +35,12 @@ export default function AdminUsersPage() {
 
   const [statusChangingId, setStatusChangingId] = useState<string | null>(null)
 
-  // キャンセル時に一覧を変えないよう、入力中と適用済みの条件を分ける。
+  // キャンセル時に一覧を変えないよう、入力中の条件はモーダル側、適用済みの条件はここで持つ。
   const [showSortModal, setShowSortModal] = useState(false)
-  const [sortCriterionInput, setSortCriterionInput] = useState<SortCriterion>(DEFAULT_SORT_CRITERION)
-  const [sortOrderInput, setSortOrderInput] = useState<SortOrder>(DEFAULT_SORT_ORDER)
   const [appliedSortCriterion, setAppliedSortCriterion] = useState<SortCriterion>(DEFAULT_SORT_CRITERION)
   const [appliedSortOrder, setAppliedSortOrder] = useState<SortOrder>(DEFAULT_SORT_ORDER)
 
   const [showFilterModal, setShowFilterModal] = useState(false)
-  const [filterInput, setFilterInput] = useState<FilterCondition>(EMPTY_FILTER)
   const [appliedFilter, setAppliedFilter] = useState<FilterCondition>(EMPTY_FILTER)
 
   useEffect(() => {
@@ -154,34 +124,15 @@ export default function AdminUsersPage() {
     }
   }
 
-  const openSortModal = () => {
-    setSortCriterionInput(appliedSortCriterion)
-    setSortOrderInput(appliedSortOrder)
-    setShowSortModal(true)
-  }
-
-  const closeSortModal = () => {
+  const applySort = (sortCriterion: SortCriterion, sortOrder: SortOrder) => {
+    setAppliedSortCriterion(sortCriterion)
+    setAppliedSortOrder(sortOrder)
     setShowSortModal(false)
   }
 
-  const applySortModal = () => {
-    setAppliedSortCriterion(sortCriterionInput)
-    setAppliedSortOrder(sortOrderInput)
-    closeSortModal()
-  }
-
-  const openFilterModal = () => {
-    setFilterInput(appliedFilter)
-    setShowFilterModal(true)
-  }
-
-  const closeFilterModal = () => {
+  const applyFilter = (filter: FilterCondition) => {
+    setAppliedFilter(filter)
     setShowFilterModal(false)
-  }
-
-  const applyFilterModal = () => {
-    setAppliedFilter(filterInput)
-    closeFilterModal()
   }
 
   if (error) {
@@ -205,10 +156,10 @@ export default function AdminUsersPage() {
       {/* 見出し・検索条件 */}
       <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
         <h4 className="mb-0">登録ユーザー一覧</h4>
-        <button className="btn btn-success btn-sm text-nowrap" onClick={openSortModal}>
+        <button className="btn btn-success btn-sm text-nowrap" onClick={() => setShowSortModal(true)}>
           並べ替え
         </button>
-        <button className="btn btn-success btn-sm text-nowrap" onClick={openFilterModal}>
+        <button className="btn btn-success btn-sm text-nowrap" onClick={() => setShowFilterModal(true)}>
           絞り込み検索
         </button>
       </div>
@@ -270,47 +221,14 @@ export default function AdminUsersPage() {
                     </button>
                   </td>
                   <td className="text-center position-relative">
-                    {/* 外クリックで閉じる処理と競合しないよう、メニュー内のクリック伝播を止める。 */}
-                    <button
-                      className="btn btn-sm btn-link text-secondary p-0"
-                      onClick={(clickEvent) => {
-                        clickEvent.stopPropagation()
-                        setOpenMenuUserId(openMenuUserId === user.id ? null : user.id)
-                      }}
-                    >
-                      ⋮
-                    </button>
-                    {openMenuUserId === user.id && (
-                      <div
-                        className="dropdown-menu show"
-                        style={{ position: "absolute", right: 0, top: "100%", zIndex: 1000, minWidth: "100px" }}
-                        onClick={(clickEvent) => clickEvent.stopPropagation()}
-                      >
-                        <button
-                          className="dropdown-item"
-                          onClick={() => navigate(`/admin/users/${user.id}`)}
-                        >
-                          詳細
-                        </button>
-                        {user.cancelledAt ? (
-                          <button
-                            className="dropdown-item"
-                            onClick={() => handleResume(user.id)}
-                            disabled={statusChangingId === user.id}
-                          >
-                            {statusChangingId === user.id ? "再開中..." : "再開"}
-                          </button>
-                        ) : (
-                          <button
-                            className="dropdown-item text-danger"
-                            onClick={() => handleCancel(user.id)}
-                            disabled={statusChangingId === user.id}
-                          >
-                            {statusChangingId === user.id ? "解約中..." : "解約"}
-                          </button>
-                        )}
-                      </div>
-                    )}
+                    <UserRowMenu
+                      user={user}
+                      isOpen={openMenuUserId === user.id}
+                      isStatusChanging={statusChangingId === user.id}
+                      onToggle={() => setOpenMenuUserId(openMenuUserId === user.id ? null : user.id)}
+                      onCancel={() => handleCancel(user.id)}
+                      onResume={() => handleResume(user.id)}
+                    />
                   </td>
                 </tr>
               ))
@@ -320,157 +238,23 @@ export default function AdminUsersPage() {
       </div>
 
       {/* 並べ替え条件 */}
-      <Modal
-        isOpen={showSortModal}
-        onClose={closeSortModal}
-        title="並べ替え"
-        titleId="user-sort-modal-title"
-        footer={
-          <>
-            <button className="btn btn-secondary" onClick={closeSortModal}>
-              戻る
-            </button>
-            <button className="btn btn-success" onClick={applySortModal}>
-              並べ替える
-            </button>
-          </>
-        }
-      >
-        <div>
-          <label htmlFor="user-sort-criteria-select" className="form-label fw-semibold">
-            並べ替え基準
-          </label>
-          <select
-            id="user-sort-criteria-select"
-            className="form-select"
-            value={sortCriterionInput}
-            onChange={(changeEvent) => {
-              const selectedValue = changeEvent.target.value
-              if (isSortCriterion(selectedValue)) setSortCriterionInput(selectedValue)
-            }}
-          >
-            <option value="createdAt">登録日</option>
-            <option value="name">名前</option>
-          </select>
-        </div>
-        <div>
-          {/* TODO: 名前で並べ替える場合のラベルは、仕様確認後に日時用と分ける。 */}
-          <label htmlFor="user-sort-order-select" className="form-label fw-semibold">
-            並べ替え順
-          </label>
-          <select
-            id="user-sort-order-select"
-            className="form-select"
-            value={sortOrderInput}
-            onChange={(changeEvent) => {
-              const selectedValue = changeEvent.target.value
-              if (isSortOrder(selectedValue)) setSortOrderInput(selectedValue)
-            }}
-          >
-            {DATE_SORT_ORDER_OPTIONS.map((sortOrderOption) => (
-              <option key={sortOrderOption.value} value={sortOrderOption.value}>
-                {sortOrderOption.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </Modal>
+      {showSortModal && (
+        <UserSortModal
+          appliedSortCriterion={appliedSortCriterion}
+          appliedSortOrder={appliedSortOrder}
+          onApply={applySort}
+          onClose={() => setShowSortModal(false)}
+        />
+      )}
 
       {/* 絞り込み条件 */}
-      <Modal
-        isOpen={showFilterModal}
-        onClose={closeFilterModal}
-        title="絞り込み検索"
-        titleId="user-filter-modal-title"
-        footer={
-          <>
-            <button className="btn btn-secondary" onClick={closeFilterModal}>
-              戻る
-            </button>
-            <button className="btn btn-success" onClick={applyFilterModal}>
-              検索する
-            </button>
-          </>
-        }
-      >
-        <div>
-          <label htmlFor="user-filter-name" className="form-label fw-semibold">
-            名前
-          </label>
-          <input
-            id="user-filter-name"
-            type="text"
-            className="form-control"
-            placeholder="例：田中"
-            value={filterInput.name}
-            onChange={(changeEvent) =>
-              setFilterInput({ ...filterInput, name: changeEvent.target.value })
-            }
-          />
-        </div>
-        <div>
-          <label htmlFor="user-filter-email" className="form-label fw-semibold">
-            メールアドレス
-          </label>
-          <input
-            id="user-filter-email"
-            type="text"
-            className="form-control"
-            placeholder="例：example@gmail.com"
-            value={filterInput.email}
-            onChange={(changeEvent) =>
-              setFilterInput({ ...filterInput, email: changeEvent.target.value })
-            }
-          />
-        </div>
-        <div>
-          <label htmlFor="user-filter-from-date" className="form-label fw-semibold">
-            登録日（から）
-          </label>
-          <input
-            id="user-filter-from-date"
-            type="date"
-            className="form-control"
-            value={filterInput.fromDate}
-            onChange={(changeEvent) =>
-              setFilterInput({ ...filterInput, fromDate: changeEvent.target.value })
-            }
-          />
-        </div>
-        <div>
-          <label htmlFor="user-filter-to-date" className="form-label fw-semibold">
-            登録日（まで）
-          </label>
-          <input
-            id="user-filter-to-date"
-            type="date"
-            className="form-control"
-            value={filterInput.toDate}
-            onChange={(changeEvent) =>
-              setFilterInput({ ...filterInput, toDate: changeEvent.target.value })
-            }
-          />
-        </div>
-
-        <div>
-          <label htmlFor="user-filter-status" className="form-label fw-semibold">
-            状態
-          </label>
-          <select
-            id="user-filter-status"
-            className="form-select"
-            value={filterInput.status}
-            onChange={(changeEvent) => {
-              const selectedValue = changeEvent.target.value
-              if (isUserStatusFilter(selectedValue)) setFilterInput({ ...filterInput, status: selectedValue })
-            }}
-          >
-            <option value="all">すべて</option>
-            <option value="active">利用中</option>
-            <option value="cancelled">解約済み</option>
-          </select>
-        </div>
-      </Modal>
+      {showFilterModal && (
+        <UserFilterModal
+          appliedFilter={appliedFilter}
+          onApply={applyFilter}
+          onClose={() => setShowFilterModal(false)}
+        />
+      )}
     </AdminLayout>
   );
 }
