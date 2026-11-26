@@ -1,0 +1,83 @@
+.video-comments {
+  --video-comment-border: #dee2e6;
+  --video-comment-reply-border: #ced4da;
+  --video-comment-muted: #6c757d;
+  --video-comment-action-min-height: 44px;
+  margin-top: 1.5rem;
+}
+
+.video-comments__title {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.video-comments__form-textarea {
+  font-size: 16px;
+}
+
+.video-comments__counter {
+  font-size: 0.8rem;
+  color: var(--video-comment-muted);
+  text-align: right;
+}
+
+.video-comments__list,
+.video-comments__replies {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.video-comments__list {
+  margin-top: 1.5rem;
+}
+
+.video-comments__thread {
+  padding: 1rem 0;
+  border-top: 1px solid var(--video-comment-border);
+}
+
+.video-comments__replies {
+  margin: 0.5rem 0 0 1rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--video-comment-reply-border);
+}
+
+.video-comments__reply {
+  padding: 0.5rem 0;
+}
+
+.video-comments__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.video-comments__author {
+  min-width: 0;
+  max-width: 100%;
+  font-weight: 600;
+}
+
+.video-comments__content {
+  margin: 0.25rem 0 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.video-comments__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.video-comments__action {
+  min-height: var(--video-comment-action-min-height);
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.video-comments__reply-form {
+  margin-top: 0.5rem;
+}

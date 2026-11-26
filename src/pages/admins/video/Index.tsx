@@ -190,7 +190,6 @@ export default function AdminVideoIndexPage() {
                       </small>
                       <div className="d-flex align-items-center gap-1">
                         <small className="text-muted">{new Date(video.createdAt).toLocaleDateString("ja-JP")}</small>
-                        {(video.userId !== null || video.adminId === admin?.id) && (
                         <div style={{ position: "relative" }}>
                           <button
                             type="button"
@@ -219,28 +218,38 @@ export default function AdminVideoIndexPage() {
                                   borderRadius: "4px",
                                   boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                                   zIndex: 10,
-                                  minWidth: "80px",
+                                  minWidth: "110px",
                                 }}
                               >
                                 <button
                                   type="button"
                                   className="btn btn-link btn-sm w-100 text-start px-3 py-2 video-menu-item"
-                                  onClick={(e) => { e.stopPropagation(); navigate(`/admin/videos/${video.id}/edit`); }}
+                                  onClick={(e) => { e.stopPropagation(); navigate(`/admin/videos/${video.id}/comments`); }}
                                 >
-                                  編集
+                                  動画コメント
                                 </button>
-                                <button
-                                  type="button"
-                                  className="btn btn-link btn-sm text-danger w-100 text-start px-3 py-2 video-menu-item"
-                                  onClick={(e) => { e.stopPropagation(); handleDelete(video.id); }}
-                                >
-                                  削除
-                                </button>
+                                {(video.userId !== null || video.adminId === admin?.id) && (
+                                  <>
+                                    <button
+                                      type="button"
+                                      className="btn btn-link btn-sm w-100 text-start px-3 py-2 video-menu-item"
+                                      onClick={(e) => { e.stopPropagation(); navigate(`/admin/videos/${video.id}/edit`); }}
+                                    >
+                                      編集
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="btn btn-link btn-sm text-danger w-100 text-start px-3 py-2 video-menu-item"
+                                      onClick={(e) => { e.stopPropagation(); handleDelete(video.id); }}
+                                    >
+                                      削除
+                                    </button>
+                                  </>
+                                )}
                               </div>
                             </>
                           )}
                         </div>
-                        )}
                       </div>
                     </div>
                   </div>
